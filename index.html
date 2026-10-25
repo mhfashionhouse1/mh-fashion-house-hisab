@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#17365d">
+<title>MH Fashion House হিসাব</title>
+<style>
+:root{--navy:#17365d;--blue:#eaf2fb;--green:#197647;--bg:#f4f7fb;--text:#172033;--muted:#65738a;--line:#dce4ee}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;color:var(--text)}
+header{background:linear-gradient(135deg,#17365d,#245c86);color:#fff;padding:22px 16px 20px;border-radius:0 0 22px 22px}
+.brand{font-size:12px;letter-spacing:1px;opacity:.85;font-weight:700}.heading{font-size:23px;font-weight:800;margin:6px 0}.sub{font-size:13px;opacity:.9}
+main{max-width:850px;margin:auto;padding:14px 12px 32px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;box-shadow:0 3px 12px #1d35570a}.card .label{font-size:12px;color:var(--muted)}.card .value{font-size:21px;font-weight:800;margin-top:5px}.green{color:var(--green)}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;margin:12px 0;box-shadow:0 3px 12px #1d35570a}
+h2{font-size:17px;margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+label{display:block;font-size:12px;color:var(--muted);margin:0 0 5px}input,select,textarea{width:100%;border:1px solid #cbd6e3;border-radius:10px;padding:11px 10px;font-size:15px;background:#fff;color:var(--text);outline-color:#3976ad}
+.full{grid-column:1/-1}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+button{border:0;border-radius:11px;padding:11px 14px;font-weight:700;font-size:14px;cursor:pointer}.primary{background:var(--navy);color:#fff}.secondary{background:var(--blue);color:var(--navy)}.danger{background:#fff0ed;color:#a43325}
+.result{background:#eef8f0;border:1px solid #c9e8d0;border-radius:12px;padding:12px;margin-top:12px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.result small{display:block;color:#4f6c59;font-size:11px}.result strong{font-size:16px;color:#176c3b}
+.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px;min-width:700px}th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left}th{background:#f0f5fb;color:#34445b;position:sticky;top:0}td.num{text-align:right;white-space:nowrap}.empty{text-align:center;color:var(--muted);padding:20px}
+.footer{text-align:center;color:var(--muted);font-size:11px;padding:12px}
+@media(max-width:520px){.heading{font-size:20px}.grid{grid-template-columns:1fr 1fr}.card .value{font-size:18px}.result{grid-template-columns:1fr}.panel{padding:12px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">MH FASHION HOUSE</div>
+  <div class="heading">বোরকা কমিশন ও লাভের হিসাব</div>
+  <div class="sub">আপনার অর্ডার, কমিশন ও লাভ—এক জায়গায়</div>
+</header>
+<main>
+  <section class="cards">
+    <div class="card"><div class="label">মোট বিক্রয়</div><div class="value" id="totalSales">৳০</div></div>
+    <div class="card"><div class="label">মোট আসল লাভ</div><div class="value green" id="totalProfit">৳০</div></div>
+    <div class="card"><div class="label">মোট অর্ডার</div><div class="value" id="totalOrders">০</div></div>
+    <div class="card"><div class="label">মোট ডেলিভারি খরচ</div><div class="value" id="totalDelivery">৳০</div></div>
+  </section>
+
+  <section class="panel">
+    <h2 id="formTitle">＋ নতুন অর্ডার যোগ করুন</h2>
+    <form id="orderForm">
+      <input type="hidden" id="editId">
+      <div class="grid">
+        <div><label for="date">তারিখ</label><input id="date" type="date" required></div>
+        <div><label for="customer">কাস্টমার / অর্ডারের নাম</label><input id="customer" placeholder="যেমন: সাফা সেট বোরকা"></div>
+        <div><label for="wholesale">বোরকার পাইকারি দাম (৳)</label><input id="wholesale" type="number" min="0" step="0.01" value="1450" required></div>
+        <div><label for="socks">হাত-মোজা-পা-মোজা (৳)</label><input id="socks" type="number" min="0" step="0.01" value="50" required></div>
+        <div><label for="sale">বিক্রয় মূল্য (৳)</label><input id="sale" type="number" min="0" step="0.01" value="2550" required></div>
+        <div><label for="delivery">ডেলিভারি চার্জ (৳)</label><select id="delivery"><option value="80">ঢাকার ভিতরে — ৮০৳</option><option value="120">নারায়ণগঞ্জ — ১২০৳</option><option value="150" selected>ঢাকার বাইরে — ১৫০৳</option><option value="0">ডেলিভারি চার্জ নেই — ০৳</option><option value="custom">নিজে লিখব</option></select></div>
+        <div id="customWrap" class="full" hidden><label for="customDelivery">নিজের ডেলিভারি চার্জ (৳)</label><input id="customDelivery" type="number" min="0" value="150"></div>
+        <div><label for="status">অর্ডারের অবস্থা</label><select id="status"><option>নতুন</option><option>প্রসেসিং</option><option>ডেলিভারি হয়েছে</option><option>রিটার্ন</option><option>বাতিল</option></select></div>
+        <div><label for="note">নোট / COD তথ্য</label><input id="note" placeholder="ঐচ্ছিক"></div>
+      </div>
+      <div class="result">
+        <div><small>কমিশন (ডেলিভারির আগে)</small><strong id="commissionPreview">৳১,০৫০</strong></div>
+        <div><small>কাস্টমারের COD মোট</small><strong id="codPreview">৳২,৭০০</strong></div>
+        <div><small>ডেলিভারির পর আসল লাভ</small><strong id="profitPreview">৳৯০০</strong></div>
+      </div>
+      <div class="buttons">
+        <button class="primary" type="submit" id="saveBtn">অর্ডার সেভ করুন</button>
+        <button class="secondary" type="button" id="resetBtn">নতুন হিসাব</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>📋 অর্ডারের তালিকা</h2>
+    <div class="buttons" style="margin:0 0 12px">
+      <button class="secondary" id="exportBtn" type="button">CSV এক্সপোর্ট</button>
+      <button class="secondary" id="backupBtn" type="button">ব্যাকআপ ডাউনলোড</button>
+      <button class="secondary" id="restoreBtn" type="button">ব্যাকআপ ফিরিয়ে আনুন</button>
+      <input id="restoreFile" type="file" accept=".json,application/json" hidden>
+    </div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>তারিখ</th><th>নাম</th><th>পাইকারি</th><th>মোজা</th><th>বিক্রি</th><th>ডেলিভারি</th><th>কমিশন</th><th>COD মোট</th><th>আসল লাভ</th><th>অবস্থা</th><th>কাজ</th></tr></thead>
+      <tbody id="orderRows"></tbody>
+    </table></div>
+    <div id="empty" class="empty">এখনো কোনো অর্ডার সেভ করা হয়নি।</div>
+  </section>
+  <div class="footer">MH Fashion House · হিসাব এই ডিভাইসের ব্রাউজারে সেভ হয়। নিয়মিত ব্যাকআপ ডাউনলোড করে রাখুন।</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const money=n=>'৳'+(Number(n)||0).toLocaleString('en-BD',{maximumFractionDigits:2});
+const num=id=>Number($(id).value)||0;
+const getDelivery=()=> $('delivery').value==='custom' ? num('customDelivery') : Number($('delivery').value)||0;
+let orders=[];
+try{orders=JSON.parse(localStorage.getItem('mhfh_orders_v1')||'[]')}catch(e){orders=[]}
+function saveStore(){localStorage.setItem('mhfh_orders_v1',JSON.stringify(orders))}
+function calculations(o){o.commission=o.sale-o.wholesale-o.socks;o.cod=o.sale+o.delivery;o.profit=o.commission-o.delivery;return o}
+function current(){return calculations({date:$('date').value,customer:$('customer').value.trim(),wholesale:num('wholesale'),socks:num('socks'),sale:num('sale'),delivery:getDelivery(),status:$('status').value,note:$('note').value.trim()})}
+function updatePreview(){let o=current();$('commissionPreview').textContent=money(o.commission);$('codPreview').textContent=money(o.cod);$('profitPreview').textContent=money(o.profit)}
+['wholesale','socks','sale','delivery','customDelivery'].forEach(id=>$(id).addEventListener('input',updatePreview));
+$('delivery').addEventListener('change',()=>{$('customWrap').hidden=$('delivery').value!=='custom';updatePreview()});
+function render(){
+ const sales=orders.reduce((s,o)=>s+o.sale,0), profits=orders.reduce((s,o)=>s+o.profit,0), delivery=orders.reduce((s,o)=>s+o.delivery,0);
+ $('totalSales').textContent=money(sales);$('totalProfit').textContent=money(profits);$('totalOrders').textContent=orders.length.toLocaleString('en-BD');$('totalDelivery').textContent=money(delivery);
+ $('orderRows').innerHTML='';
+ $('empty').style.display=orders.length?'none':'block';
+ [...orders].reverse().forEach(o=>{
+  let tr=document.createElement('tr');
+  const vals=[o.date||'',o.customer||'নাম দেওয়া হয়নি',money(o.wholesale),money(o.socks),money(o.sale),money(o.delivery),money(o.commission),money(o.cod),money(o.profit),o.status||'নতুন'];
+  vals.forEach((v,i)=>{let td=document.createElement('td');td.textContent=v;if(i>=2&&i<=8)td.className='num';tr.appendChild(td)});
+  let td=document.createElement('td'), edit=document.createElement('button');edit.textContent='এডিট';edit.className='secondary';edit.onclick=()=>editOrder(o.id);
+  let del=document.createElement('button');del.textContent='মুছুন';del.className='danger';del.style.marginLeft='4px';del.onclick=()=>deleteOrder(o.id);td.append(edit,del);tr.appendChild(td);$('orderRows').appendChild(tr);
+ });
+}
+function resetForm(){ $('orderForm').reset();$('editId').value='';$('date').value=new Date().toISOString().slice(0,10);$('wholesale').value=1450;$('socks').value=50;$('sale').value=2550;$('delivery').value='150';$('customWrap').hidden=true;$('status').value='নতুন';$('formTitle').textContent='＋ নতুন অর্ডার যোগ করুন';$('saveBtn').textContent='অর্ডার সেভ করুন';updatePreview() }
+$('orderForm').addEventListener('submit',e=>{e.preventDefault();let o=current();o.id=$('editId').value||String(Date.now());if(!o.date){alert('তারিখ দিন');return}if(o.sale<0||o.wholesale<0||o.socks<0||o.delivery<0){alert('টাকার অঙ্ক ০ বা তার বেশি দিন');return}const ix=orders.findIndex(x=>x.id===o.id);if(ix>=0)orders[ix]=o;else orders.push(o);saveStore();render();resetForm();});
+$('resetBtn').onclick=resetForm;
+function editOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;$('editId').value=o.id;$('date').value=o.date;$('customer').value=o.customer;$('wholesale').value=o.wholesale;$('socks').value=o.socks;$('sale').value=o.sale;$('status').value=o.status;$('note').value=o.note||'';let standard=[0,80,120,150];if(standard.includes(o.delivery)){$('delivery').value=String(o.delivery);$('customWrap').hidden=true}else{$('delivery').value='custom';$('customDelivery').value=o.delivery;$('customWrap').hidden=false}$('formTitle').textContent='✎ অর্ডার এডিট করুন';$('saveBtn').textContent='পরিবর্তন সেভ করুন';updatePreview();window.scrollTo({top:0,behavior:'smooth'})}
+function deleteOrder(id){if(confirm('এই অর্ডারটি মুছে ফেলবেন?')){orders=orders.filter(o=>o.id!==id);saveStore();render();if($('editId').value===id)resetForm()}}
+$('exportBtn').onclick=()=>{let cols=['তারিখ','নাম','পাইকারি দাম','মোজার খরচ','বিক্রয় মূল্য','ডেলিভারি চার্জ','কমিশন','COD মোট','আসল লাভ','অবস্থা','নোট'];let rows=orders.map(o=>[o.date,o.customer,o.wholesale,o.socks,o.sale,o.delivery,o.commission,o.cod,o.profit,o.status,o.note]);let csv='\uFEFF'+[cols,...rows].map(r=>r.map(x=>'"'+String(x??'').replaceAll('"','""')+'"').join(',')).join('\r\n');download(csv,'MH_Fashion_House_Hisab.csv','text/csv;charset=utf-8;')};
+$('backupBtn').onclick=()=>download(JSON.stringify(orders,null,2),'MH_Fashion_House_Backup.json','application/json');
+$('restoreBtn').onclick=()=>$('restoreFile').click();
+$('restoreFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let data=JSON.parse(await f.text());if(!Array.isArray(data))throw Error();if(confirm('বর্তমান অর্ডারের সঙ্গে ব্যাকআপের অর্ডার যোগ করবেন? Cancel দিলে বর্তমান হিসাবের জায়গায় ব্যাকআপ বসবে।')){orders=[...orders,...data.map(o=>({...o,id:String(Date.now())+Math.random()}))]}else{orders=data}orders=orders.map(calculations);saveStore();render();alert('ব্যাকআপ লোড হয়েছে।')}catch(err){alert('ব্যাকআপ ফাইলটি সঠিক নয়।')}e.target.value=''};
+function download(content,name,type){let blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
+resetForm();render();
+</script>
+</body>
+</html>
